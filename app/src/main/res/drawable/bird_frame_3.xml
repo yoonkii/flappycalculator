@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="72dp"
+    android:height="72dp"
+    android:viewportWidth="72"
+    android:viewportHeight="72">
+
+    <!-- Business Analyst Bird - Frame 3 (Wings Down / Bearish) -->
+
+    <!-- Body (Suit) -->
+    <path
+        android:fillColor="#1E3A5F"
+        android:pathData="M26,32 L46,32 L48,52 L24,52 Z" />
+
+    <!-- Suit Lapels -->
+    <path
+        android:fillColor="#2C5282"
+        android:pathData="M30,32 L36,42 L36,52 L30,52 Z" />
+    <path
+        android:fillColor="#2C5282"
+        android:pathData="M42,32 L36,42 L36,52 L42,52 Z" />
+
+    <!-- White Shirt -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M33,32 L39,32 L38,45 L34,45 Z" />
+
+    <!-- Red Tie -->
+    <path
+        android:fillColor="#E53E3E"
+        android:pathData="M35,32 L37,32 L38,48 L36,50 L34,48 Z" />
+
+    <!-- Head -->
+    <path
+        android:fillColor="#F6AD55"
+        android:pathData="M28,16 Q28,8 36,8 Q44,8 44,16 L44,28 Q44,32 36,32 Q28,32 28,28 Z" />
+
+    <!-- Hair -->
+    <path
+        android:fillColor="#2D3748"
+        android:pathData="M28,14 Q28,6 36,6 Q44,6 44,14 L44,12 Q40,16 36,14 Q32,16 28,12 Z" />
+
+    <!-- Eyes (worried) -->
+    <path
+        android:fillColor="#1A202C"
+        android:pathData="M32,19 m-2,0 a2,1.5 0 1,1 4,0 a2,1.5 0 1,1 -4,0" />
+    <path
+        android:fillColor="#1A202C"
+        android:pathData="M40,19 m-2,0 a2,1.5 0 1,1 4,0 a2,1.5 0 1,1 -4,0" />
+
+    <!-- Worried eyebrows -->
+    <path
+        android:strokeColor="#2D3748"
+        android:strokeWidth="1.5"
+        android:pathData="M29,15 L33,17" />
+    <path
+        android:strokeColor="#2D3748"
+        android:strokeWidth="1.5"
+        android:pathData="M43,15 L39,17" />
+
+    <!-- Worried mouth -->
+    <path
+        android:fillColor="#1A202C"
+        android:pathData="M33,26 Q36,24 39,26"
+        android:strokeWidth="1"
+        android:strokeColor="#1A202C" />
+
+    <!-- Left Arm (Down) -->
+    <path
+        android:fillColor="#1E3A5F"
+        android:pathData="M24,34 L18,52 L22,54 L28,38 Z" />
+
+    <!-- Left Hand -->
+    <path
+        android:fillColor="#F6AD55"
+        android:pathData="M18,54 m-3,0 a3,3 0 1,1 6,0 a3,3 0 1,1 -6,0" />
+
+    <!-- Right Arm (Down) -->
+    <path
+        android:fillColor="#1E3A5F"
+        android:pathData="M48,34 L54,52 L50,54 L44,38 Z" />
+
+    <!-- Right Hand -->
+    <path
+        android:fillColor="#F6AD55"
+        android:pathData="M54,54 m-3,0 a3,3 0 1,1 6,0 a3,3 0 1,1 -6,0" />
+
+    <!-- Briefcase -->
+    <path
+        android:fillColor="#8B4513"
+        android:pathData="M28,52 L44,52 L44,62 L28,62 Z" />
+    <path
+        android:fillColor="#D69E2E"
+        android:pathData="M34,52 L38,52 L38,54 L34,54 Z" />
+    <path
+        android:fillColor="#A0522D"
+        android:pathData="M28,56 L44,56 L44,58 L28,58 Z" />
+
+</vector>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp"
+    android:height="640dp"
+    android:viewportWidth="360"
+    android:viewportHeight="640">
+
+    <!-- Wall Street NYC Skyline Background -->
+
+    <!-- Sky gradient (dark blue to lighter blue) -->
+    <path
+        android:fillColor="#0D1B2A"
+        android:pathData="M0,0 L360,0 L360,640 L0,640 Z" />
+
+    <!-- Upper sky (lighter) -->
+    <path
+        android:fillColor="#1B263B"
+        android:pathData="M0,0 L360,0 L360,200 L0,200 Z" />
+
+    <!-- Mid sky -->
+    <path
+        android:fillColor="#152238"
+        android:pathData="M0,200 L360,200 L360,400 L0,400 Z" />
+
+    <!-- Distant buildings (far layer) -->
+    <path
+        android:fillColor="#1A202C"
+        android:pathData="M0,300 L20,280 L20,320 L40,250 L40,320 L60,290 L60,320 L80,260 L80,320 L100,230 L100,320 L120,270 L120,320 L140,240 L140,320 L160,280 L160,320 L180,200 L180,320 L200,260 L200,320 L220,240 L220,320 L240,280 L240,320 L260,250 L260,320 L280,230 L280,320 L300,270 L300,320 L320,290 L320,320 L340,260 L340,320 L360,280 L360,320 L360,640 L0,640 Z" />
+
+    <!-- Main skyline (mid layer) -->
+    <path
+        android:fillColor="#2D3748"
+        android:pathData="M0,380 L30,350 L30,400 L50,320 L50,400 L70,360 L70,400 L90,280 L90,400 L110,340 L110,400 L130,300 L130,400 L150,360 L150,400 L170,250 L175,250 L175,400 L195,320 L195,400 L215,290 L215,400 L235,350 L235,400 L255,310 L255,400 L275,340 L275,400 L295,370 L295,400 L315,330 L315,400 L335,360 L335,400 L360,340 L360,640 L0,640 Z" />
+
+    <!-- Freedom Tower / One World Trade -->
+    <path
+        android:fillColor="#4A5568"
+        android:pathData="M170,180 L175,120 L180,180 L180,400 L170,400 Z" />
+    <path
+        android:fillColor="#718096"
+        android:pathData="M175,120 L178,180 L175,180 Z" />
+
+    <!-- Building windows (gold lights) -->
+    <path
+        android:fillColor="#D69E2E"
+        android:pathData="M95,300 L98,300 L98,305 L95,305 Z" />
+    <path
+        android:fillColor="#D69E2E"
+        android:pathData="M95,320 L98,320 L98,325 L95,325 Z" />
+    <path
+        android:fillColor="#D69E2E"
+        android:pathData="M95,340 L98,340 L98,345 L95,345 Z" />
+    <path
+        android:fillColor="#D69E2E"
+        android:pathData="M133,320 L136,320 L136,325 L133,325 Z" />
+    <path
+        android:fillColor="#D69E2E"
+        android:pathData="M133,340 L136,340 L136,345 L133,345 Z" />
+    <path
+        android:fillColor="#D69E2E"
+        android:pathData="M173,200 L176,200 L176,205 L173,205 Z" />
+    <path
+        android:fillColor="#D69E2E"
+        android:pathData="M173,220 L176,220 L176,225 L173,225 Z" />
+    <path
+        android:fillColor="#D69E2E"
+        android:pathData="M173,240 L176,240 L176,245 L173,245 Z" />
+    <path
+        android:fillColor="#D69E2E"
+        android:pathData="M218,310 L221,310 L221,315 L218,315 Z" />
+    <path
+        android:fillColor="#D69E2E"
+        android:pathData="M218,330 L221,330 L221,335 L218,335 Z" />
+    <path
+        android:fillColor="#D69E2E"
+        android:pathData="M258,330 L261,330 L261,335 L258,335 Z" />
+    <path
+        android:fillColor="#D69E2E"
+        android:pathData="M258,350 L261,350 L261,355 L258,355 Z" />
+    <path
+        android:fillColor="#D69E2E"
+        android:pathData="M318,350 L321,350 L321,355 L318,355 Z" />
+    <path
+        android:fillColor="#D69E2E"
+        android:pathData="M318,370 L321,370 L321,375 L318,375 Z" />
+
+    <!-- Stock ticker bar at top -->
+    <path
+        android:fillColor="#1A202C"
+        android:pathData="M0,0 L360,0 L360,24 L0,24 Z" />
+
+    <!-- Ticker text simulation (green for up) -->
+    <path
+        android:fillColor="#48BB78"
+        android:pathData="M10,8 L30,8 L30,10 L10,10 Z" />
+    <path
+        android:fillColor="#48BB78"
+        android:pathData="M35,14 L45,14 L45,16 L35,16 Z" />
+    <path
+        android:fillColor="#E53E3E"
+        android:pathData="M60,8 L80,8 L80,10 L60,10 Z" />
+    <path
+        android:fillColor="#48BB78"
+        android:pathData="M85,14 L100,14 L100,16 L85,16 Z" />
+    <path
+        android:fillColor="#48BB78"
+        android:pathData="M110,8 L125,8 L125,10 L110,10 Z" />
+    <path
+        android:fillColor="#E53E3E"
+        android:pathData="M140,14 L155,14 L155,16 L140,16 Z" />
+    <path
+        android:fillColor="#48BB78"
+        android:pathData="M170,8 L190,8 L190,10 L170,10 Z" />
+    <path
+        android:fillColor="#48BB78"
+        android:pathData="M200,14 L215,14 L215,16 L200,16 Z" />
+    <path
+        android:fillColor="#E53E3E"
+        android:pathData="M230,8 L250,8 L250,10 L230,10 Z" />
+    <path
+        android:fillColor="#48BB78"
+        android:pathData="M260,14 L280,14 L280,16 L260,16 Z" />
+    <path
+        android:fillColor="#48BB78"
+        android:pathData="M295,8 L315,8 L315,10 L295,10 Z" />
+    <path
+        android:fillColor="#E53E3E"
+        android:pathData="M325,14 L345,14 L345,16 L325,16 Z" />
+
+    <!-- Stars -->
+    <path
+        android:fillColor="#E2E8F0"
+        android:pathData="M50,50 m-1,0 a1,1 0 1,1 2,0 a1,1 0 1,1 -2,0" />
+    <path
+        android:fillColor="#E2E8F0"
+        android:pathData="M120,80 m-1,0 a1,1 0 1,1 2,0 a1,1 0 1,1 -2,0" />
+    <path
+        android:fillColor="#E2E8F0"
+        android:pathData="M200,45 m-1,0 a1,1 0 1,1 2,0 a1,1 0 1,1 -2,0" />
+    <path
+        android:fillColor="#E2E8F0"
+        android:pathData="M280,70 m-1,0 a1,1 0 1,1 2,0 a1,1 0 1,1 -2,0" />
+    <path
+        android:fillColor="#E2E8F0"
+        android:pathData="M330,55 m-1,0 a1,1 0 1,1 2,0 a1,1 0 1,1 -2,0" />
+    <path
+        android:fillColor="#E2E8F0"
+        android:pathData="M80,100 m-1,0 a1,1 0 1,1 2,0 a1,1 0 1,1 -2,0" />
+    <path
+        android:fillColor="#E2E8F0"
+        android:pathData="M160,130 m-1,0 a1,1 0 1,1 2,0 a1,1 0 1,1 -2,0" />
+    <path
+        android:fillColor="#E2E8F0"
+        android:pathData="M240,110 m-1,0 a1,1 0 1,1 2,0 a1,1 0 1,1 -2,0" />
+
+</vector>

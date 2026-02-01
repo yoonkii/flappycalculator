@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Game Colors -->
+    <color name="sky_blue">#87CEEB</color>
+    <color name="sky_blue_dark">#5BADD8</color>
+    <color name="grass_green">#7CFC00</color>
+    <color name="grass_green_dark">#5BBF00</color>
+
+    <!-- Bird Colors -->
+    <color name="bird_yellow">#FFD700</color>
+    <color name="bird_orange">#FFA500</color>
+    <color name="bird_beak">#FF6B35</color>
+
+    <!-- Pipe Colors -->
+    <color name="pipe_green">#73BF2E</color>
+    <color name="pipe_green_dark">#5A9624</color>
+    <color name="pipe_green_light">#8CD93F</color>
+
+    <!-- UI Colors -->
+    <color name="keypad_background">#2D2D2D</color>
+    <color name="keypad_button">#404040</color>
+    <color name="keypad_button_pressed">#505050</color>
+    <color name="keypad_text">#FFFFFF</color>
+    <color name="submit_button">#4CAF50</color>
+    <color name="submit_button_pressed">#388E3C</color>
+    <color name="backspace_button">#F44336</color>
+    <color name="backspace_button_pressed">#D32F2F</color>
+
+    <!-- Feedback Colors -->
+    <color name="correct_green">#4CAF50</color>
+    <color name="wrong_red">#F44336</color>
+    <color name="score_white">#FFFFFF</color>
+
+    <!-- Math Problem Display -->
+    <color name="problem_background">#FFFFFFCC</color>
+    <color name="problem_text">#333333</color>
+    <color name="input_background">#FFFFFF</color>
+    <color name="input_text">#000000</color>
+
+    <!-- Theme Colors -->
+    <color name="primary">#4CAF50</color>
+    <color name="primary_dark">#388E3C</color>
+    <color name="secondary">#FFD700</color>
+    <color name="background">#87CEEB</color>
+    <color name="surface">#2D2D2D</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="on_secondary">#000000</color>
+    <color name="on_background">#000000</color>
+    <color name="on_surface">#FFFFFF</color>
+</resources>

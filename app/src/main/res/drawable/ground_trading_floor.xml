@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="360dp"
+    android:height="60dp"
+    android:viewportWidth="360"
+    android:viewportHeight="60">
+
+    <!-- Trading Floor Ground -->
+
+    <!-- Main floor (dark marble) -->
+    <path
+        android:fillColor="#1A202C"
+        android:pathData="M0,0 L360,0 L360,60 L0,60 Z" />
+
+    <!-- Floor highlight line -->
+    <path
+        android:fillColor="#2D3748"
+        android:pathData="M0,0 L360,0 L360,4 L0,4 Z" />
+
+    <!-- Marble pattern lines -->
+    <path
+        android:strokeColor="#2D3748"
+        android:strokeWidth="0.5"
+        android:pathData="M0,15 L360,15" />
+    <path
+        android:strokeColor="#2D3748"
+        android:strokeWidth="0.5"
+        android:pathData="M0,30 L360,30" />
+    <path
+        android:strokeColor="#2D3748"
+        android:strokeWidth="0.5"
+        android:pathData="M0,45 L360,45" />
+
+    <!-- Vertical grid lines (like trading terminal) -->
+    <path
+        android:strokeColor="#2D3748"
+        android:strokeWidth="0.5"
+        android:pathData="M40,0 L40,60" />
+    <path
+        android:strokeColor="#2D3748"
+        android:strokeWidth="0.5"
+        android:pathData="M80,0 L80,60" />
+    <path
+        android:strokeColor="#2D3748"
+        android:strokeWidth="0.5"
+        android:pathData="M120,0 L120,60" />
+    <path
+        android:strokeColor="#2D3748"
+        android:strokeWidth="0.5"
+        android:pathData="M160,0 L160,60" />
+    <path
+        android:strokeColor="#2D3748"
+        android:strokeWidth="0.5"
+        android:pathData="M200,0 L200,60" />
+    <path
+        android:strokeColor="#2D3748"
+        android:strokeWidth="0.5"
+        android:pathData="M240,0 L240,60" />
+    <path
+        android:strokeColor="#2D3748"
+        android:strokeWidth="0.5"
+        android:pathData="M280,0 L280,60" />
+    <path
+        android:strokeColor="#2D3748"
+        android:strokeWidth="0.5"
+        android:pathData="M320,0 L320,60" />
+
+    <!-- Gold accent strip (like stock exchange floor) -->
+    <path
+        android:fillColor="#D69E2E"
+        android:pathData="M0,56 L360,56 L360,60 L0,60 Z" />
+
+</vector>

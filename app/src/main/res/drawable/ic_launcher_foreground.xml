@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Bird body (yellow circle) -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M54,54m-20,0a20,20 0,1 1,40 0a20,20 0,1 1,-40 0"/>
+
+    <!-- Bird wing -->
+    <path
+        android:fillColor="#FFA500"
+        android:pathData="M44,54 Q34,48 34,54 Q34,60 44,54"/>
+
+    <!-- Bird eye -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M62,48m-4,0a4,4 0,1 1,8 0a4,4 0,1 1,-8 0"/>
+
+    <!-- Bird beak -->
+    <path
+        android:fillColor="#FF6B35"
+        android:pathData="M74,54 L82,50 L82,58 Z"/>
+
+    <!-- Plus sign (math symbol) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#333333"
+        android:strokeWidth="1"
+        android:pathData="M50,74 L58,74 L58,82 L50,82 Z"/>
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#333333"
+        android:strokeWidth="1"
+        android:pathData="M46,78 L46,78 L62,78 L62,78"/>
+    <path
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#333333"
+        android:strokeWidth="1"
+        android:pathData="M54,72 L54,84"/>
+
+</vector>

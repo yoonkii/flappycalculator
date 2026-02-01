@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Flappy Calculator</string>
+    <string name="title_tap_to_start">Tap to Start</string>
+    <string name="title_high_score">High Score: %d</string>
+    <string name="game_score">Score: %d</string>
+    <string name="game_over_title">Game Over</string>
+    <string name="game_over_score">Score: %d</string>
+    <string name="game_over_high_score">High Score: %d</string>
+    <string name="game_over_new_high_score">New High Score!</string>
+    <string name="button_retry">Retry</string>
+    <string name="button_menu">Menu</string>
+    <string name="button_submit">Submit</string>
+    <string name="button_backspace">Backspace</string>
+    <string name="content_description_bird">Game bird character</string>
+    <string name="content_description_keypad">Numeric keypad for entering answers</string>
+</resources>

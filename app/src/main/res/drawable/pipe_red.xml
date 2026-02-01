@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="480dp"
+    android:viewportWidth="96"
+    android:viewportHeight="480">
+
+    <!-- Red Stock Bar (Bearish / Down) -->
+
+    <!-- Main bar body with gradient effect -->
+    <path
+        android:fillColor="#C53030"
+        android:pathData="M0,0 L96,0 L96,480 L0,480 Z" />
+
+    <!-- Highlight (left side) -->
+    <path
+        android:fillColor="#FC8181"
+        android:pathData="M0,0 L16,0 L16,480 L0,480 Z" />
+
+    <!-- Mid tone -->
+    <path
+        android:fillColor="#E53E3E"
+        android:pathData="M16,0 L64,0 L64,480 L16,480 Z" />
+
+    <!-- Shadow (right side) -->
+    <path
+        android:fillColor="#9B2C2C"
+        android:pathData="M80,0 L96,0 L96,480 L80,480 Z" />
+
+    <!-- Candlestick wick (top) -->
+    <path
+        android:fillColor="#742A2A"
+        android:pathData="M44,0 L52,0 L52,20 L44,20 Z" />
+
+    <!-- Candlestick wick (bottom) -->
+    <path
+        android:fillColor="#742A2A"
+        android:pathData="M44,460 L52,460 L52,480 L44,480 Z" />
+
+    <!-- Grid lines for trading chart effect -->
+    <path
+        android:strokeColor="#9B2C2C"
+        android:strokeWidth="1"
+        android:pathData="M0,80 L96,80" />
+    <path
+        android:strokeColor="#9B2C2C"
+        android:strokeWidth="1"
+        android:pathData="M0,160 L96,160" />
+    <path
+        android:strokeColor="#9B2C2C"
+        android:strokeWidth="1"
+        android:pathData="M0,240 L96,240" />
+    <path
+        android:strokeColor="#9B2C2C"
+        android:strokeWidth="1"
+        android:pathData="M0,320 L96,320" />
+    <path
+        android:strokeColor="#9B2C2C"
+        android:strokeWidth="1"
+        android:pathData="M0,400 L96,400" />
+
+</vector>
