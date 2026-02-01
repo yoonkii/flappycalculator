@@ -12,7 +12,7 @@ This document specifies all visual and audio assets needed for the game with a *
 - **Bird**: Business analyst character (suit, tie, briefcase, or trading terminal)
 - **Background**: New York City Wall Street skyline, stock tickers, financial district
 - **Pipes/Obstacles**: Stock chart bars (red for down, blue/green for up)
-- **Colors**: Professional blues, golds, with red/green market colors
+- **Colors**: Professional blues, golds, with rded/green market colors
 
 ---
 
