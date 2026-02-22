@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -87,32 +89,31 @@ fun GameScreen(
             )
 
             // Overlay UI elements
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
+                    .statusBarsPadding()
                     .padding(16.dp)
             ) {
                 // Score display (top left)
                 ScoreDisplay(
                     score = uiState.score,
-                    modifier = Modifier.align(Alignment.Start)
+                    modifier = Modifier.align(Alignment.TopStart)
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Math problem (centered)
+                // Math problem (bottom center, just above keypad boundary)
                 MathProblemDisplay(
                     problem = uiState.currentProblem,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .padding(bottom = 8.dp)
                 )
 
                 // "Tap to start" message when ready
                 if (uiState.gameState == GameState.READY) {
-                    Spacer(modifier = Modifier.weight(1f))
                     TapToStartOverlay(
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                        modifier = Modifier.align(Alignment.Center)
                     )
-                    Spacer(modifier = Modifier.weight(1f))
                 }
             }
         }
@@ -123,6 +124,7 @@ fun GameScreen(
                 .fillMaxWidth()
                 .weight(0.4f)
                 .background(KeypadBackground)
+                .navigationBarsPadding()
                 .padding(horizontal = 12.dp, vertical = 8.dp)
         ) {
             // Answer input display

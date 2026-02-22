@@ -14,7 +14,9 @@ object GameConfig {
     const val PIPE_GAP_MULTIPLIER = 6.0f        // gap height = bird height × this (generous)
     const val PIPE_WIDTH_RATIO = 0.15f          // pipe width = screen width × this
     const val PIPE_SPACING = 550f               // horizontal distance between pipes (more time)
+    const val PIPE_SPACING_RATIO = 0.51f        // pipe spacing = screen width × this (responsive)
     const val MIN_PIPE_HEIGHT_RATIO = 0.1f      // minimum pipe height as ratio of game area
+    const val MAX_GAP_HEIGHT_RATIO = 0.45f      // gap can be at most 45% of game area height
 
     // Scroll speed
     const val INITIAL_SCROLL_SPEED = 100f       // pixels/sec at start (slow)

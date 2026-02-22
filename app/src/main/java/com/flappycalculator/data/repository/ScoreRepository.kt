@@ -21,6 +21,15 @@ class ScoreRepository(
     }
 
     /**
+     * Get top 10 scores.
+     *
+     * @return List of top scores (up to 10), sorted highest to lowest
+     */
+    suspend fun getTopScores(): List<Int> = withContext(Dispatchers.IO) {
+        scorePreferences.getTopScores()
+    }
+
+    /**
      * Save a score and update high score if applicable.
      *
      * @param score The score to save
@@ -29,6 +38,17 @@ class ScoreRepository(
     suspend fun saveScore(score: Int): Boolean = withContext(Dispatchers.IO) {
         scorePreferences.incrementGamesPlayed()
         scorePreferences.updateHighScoreIfBetter(score)
+    }
+
+    /**
+     * Save a score and get the rank if it made top 10.
+     *
+     * @param score The score to save
+     * @return The rank (1-10) if in top 10, null otherwise
+     */
+    suspend fun saveScoreAndGetRank(score: Int): Int? = withContext(Dispatchers.IO) {
+        scorePreferences.incrementGamesPlayed()
+        scorePreferences.addScore(score)
     }
 
     /**

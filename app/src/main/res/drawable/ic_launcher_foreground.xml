@@ -5,41 +5,94 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
-    <!-- Bird body (yellow circle) -->
-    <path
-        android:fillColor="#FFD700"
-        android:pathData="M54,54m-20,0a20,20 0,1 1,40 0a20,20 0,1 1,-40 0"/>
+    <!-- Business Analyst Character - Launcher/Splash Icon -->
+    <!-- Centered in 108x108 canvas (safe zone is center 72x72) -->
 
-    <!-- Bird wing -->
+    <!-- Body (Suit) -->
     <path
-        android:fillColor="#FFA500"
-        android:pathData="M44,54 Q34,48 34,54 Q34,60 44,54"/>
+        android:fillColor="#1E3A5F"
+        android:pathData="M44,50 L64,50 L66,74 L42,74 Z" />
 
-    <!-- Bird eye -->
+    <!-- Suit Lapels -->
     <path
-        android:fillColor="#000000"
-        android:pathData="M62,48m-4,0a4,4 0,1 1,8 0a4,4 0,1 1,-8 0"/>
-
-    <!-- Bird beak -->
+        android:fillColor="#2C5282"
+        android:pathData="M48,50 L54,62 L54,74 L48,74 Z" />
     <path
-        android:fillColor="#FF6B35"
-        android:pathData="M74,54 L82,50 L82,58 Z"/>
+        android:fillColor="#2C5282"
+        android:pathData="M60,50 L54,62 L54,74 L60,74 Z" />
 
-    <!-- Plus sign (math symbol) -->
+    <!-- White Shirt -->
     <path
         android:fillColor="#FFFFFF"
-        android:strokeColor="#333333"
-        android:strokeWidth="1"
-        android:pathData="M50,74 L58,74 L58,82 L50,82 Z"/>
+        android:pathData="M51,50 L57,50 L56,66 L52,66 Z" />
+
+    <!-- Red Tie -->
+    <path
+        android:fillColor="#E53E3E"
+        android:pathData="M53,50 L55,50 L56,70 L54,72 L52,70 Z" />
+
+    <!-- Head -->
+    <path
+        android:fillColor="#F6AD55"
+        android:pathData="M46,30 Q46,20 54,20 Q62,20 62,30 L62,44 Q62,50 54,50 Q46,50 46,44 Z" />
+
+    <!-- Hair -->
+    <path
+        android:fillColor="#2D3748"
+        android:pathData="M46,28 Q46,18 54,18 Q62,18 62,28 L62,26 Q58,30 54,28 Q50,30 46,26 Z" />
+
+    <!-- Eyes -->
+    <path
+        android:fillColor="#1A202C"
+        android:pathData="M50,34 m-2.5,0 a2.5,2.5 0 1,1 5,0 a2.5,2.5 0 1,1 -5,0" />
+    <path
+        android:fillColor="#1A202C"
+        android:pathData="M58,34 m-2.5,0 a2.5,2.5 0 1,1 5,0 a2.5,2.5 0 1,1 -5,0" />
+
+    <!-- Eye Shine -->
     <path
         android:fillColor="#FFFFFF"
-        android:strokeColor="#333333"
-        android:strokeWidth="1"
-        android:pathData="M46,78 L46,78 L62,78 L62,78"/>
+        android:pathData="M49,33 m-0.7,0 a0.7,0.7 0 1,1 1.4,0 a0.7,0.7 0 1,1 -1.4,0" />
     <path
         android:fillColor="#FFFFFF"
-        android:strokeColor="#333333"
-        android:strokeWidth="1"
-        android:pathData="M54,72 L54,84"/>
+        android:pathData="M57,33 m-0.7,0 a0.7,0.7 0 1,1 1.4,0 a0.7,0.7 0 1,1 -1.4,0" />
+
+    <!-- Confident Smile -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:pathData="M51,40 Q54,44 57,40"
+        android:strokeWidth="1.5"
+        android:strokeColor="#1A202C" />
+
+    <!-- Left Arm (Up - Bullish!) -->
+    <path
+        android:fillColor="#1E3A5F"
+        android:pathData="M42,52 L34,36 L38,34 L46,50 Z" />
+
+    <!-- Left Hand -->
+    <path
+        android:fillColor="#F6AD55"
+        android:pathData="M34,34 m-4,0 a4,4 0 1,1 8,0 a4,4 0 1,1 -8,0" />
+
+    <!-- Right Arm (Up - Bullish!) -->
+    <path
+        android:fillColor="#1E3A5F"
+        android:pathData="M66,52 L74,36 L70,34 L62,50 Z" />
+
+    <!-- Right Hand -->
+    <path
+        android:fillColor="#F6AD55"
+        android:pathData="M74,34 m-4,0 a4,4 0 1,1 8,0 a4,4 0 1,1 -8,0" />
+
+    <!-- Briefcase -->
+    <path
+        android:fillColor="#8B4513"
+        android:pathData="M46,74 L62,74 L62,86 L46,86 Z" />
+    <path
+        android:fillColor="#D69E2E"
+        android:pathData="M52,74 L56,74 L56,76 L52,76 Z" />
+    <path
+        android:fillColor="#A0522D"
+        android:pathData="M46,79 L62,79 L62,81 L46,81 Z" />
 
 </vector>

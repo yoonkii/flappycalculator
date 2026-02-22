@@ -61,23 +61,39 @@ class MathProblemGenerator(
     /**
      * Generate an addition problem.
      * Operand range depends on tier.
+     * Tier 2 uses mixed digits (2d + 1d) for gentler progression.
      */
     private fun generateAddition(tier: DifficultyTier): MathProblem {
-        val maxValue = getMaxValue(tier)
-        val a = random.nextInt(1, maxValue + 1)
-        val b = random.nextInt(1, maxValue + 1)
-        return MathProblem.addition(a, b)
+        return if (tier == DifficultyTier.TIER_2) {
+            // Mixed: one 2-digit + one 1-digit
+            val twoDigit = random.nextInt(10, 100)
+            val oneDigit = random.nextInt(1, 10)
+            MathProblem.addition(twoDigit, oneDigit)
+        } else {
+            val maxValue = getMaxValue(tier)
+            val a = random.nextInt(1, maxValue + 1)
+            val b = random.nextInt(1, maxValue + 1)
+            MathProblem.addition(a, b)
+        }
     }
 
     /**
      * Generate a subtraction problem.
      * First operand is always larger to ensure positive result.
+     * Tier 2 uses mixed digits (2d - 1d) for gentler progression.
      */
     private fun generateSubtraction(tier: DifficultyTier): MathProblem {
-        val maxValue = getMaxValue(tier)
-        val a = random.nextInt(10, maxValue + 1)  // Ensure reasonable subtraction
-        val b = random.nextInt(1, a)  // b is always smaller than a
-        return MathProblem.subtraction(a, b)
+        return if (tier == DifficultyTier.TIER_2) {
+            // Mixed: 2-digit - 1-digit
+            val twoDigit = random.nextInt(10, 100)
+            val oneDigit = random.nextInt(1, minOf(10, twoDigit))
+            MathProblem.subtraction(twoDigit, oneDigit)
+        } else {
+            val maxValue = getMaxValue(tier)
+            val a = random.nextInt(10, maxValue + 1)  // Ensure reasonable subtraction
+            val b = random.nextInt(1, a)  // b is always smaller than a
+            MathProblem.subtraction(a, b)
+        }
     }
 
     /**

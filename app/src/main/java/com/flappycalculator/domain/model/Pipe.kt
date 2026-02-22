@@ -105,7 +105,9 @@ data class Pipe(
             random: kotlin.random.Random = kotlin.random.Random.Default
         ): Pipe {
             val pipeWidth = screenWidth * GameConfig.PIPE_WIDTH_RATIO
-            val gapHeight = birdHeight * GameConfig.PIPE_GAP_MULTIPLIER
+            val rawGapHeight = birdHeight * GameConfig.PIPE_GAP_MULTIPLIER
+            val maxGapHeight = screenHeight * GameConfig.MAX_GAP_HEIGHT_RATIO
+            val gapHeight = minOf(rawGapHeight, maxGapHeight)
 
             // Calculate valid range for gap center
             val minGapCenter = screenHeight * GameConfig.MIN_PIPE_HEIGHT_RATIO + gapHeight / 2

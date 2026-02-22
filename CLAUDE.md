@@ -39,7 +39,9 @@ IMPORTANT: Physics constants in `GameConfig.kt` - adjust for playtesting:
 - TERMINAL_VELOCITY = 350f (max fall speed)
 - FLAP_IMPULSE = -520f (high upward velocity for thinking time)
 - PIPE_GAP_MULTIPLIER = 6.0f (gap = bird height x this)
-- PIPE_SPACING = 550f (distance between pipes)
+- MAX_GAP_HEIGHT_RATIO = 0.45f (gap capped at 45% of game area height)
+- PIPE_SPACING_RATIO = 0.51f (responsive pipe spacing based on screen width)
+- PIPE_SPACING = 550f (legacy; replaced by PIPE_SPACING_RATIO for responsive behavior)
 - INITIAL_SCROLL_SPEED = 100f (slow start)
 
 IMPORTANT: Math problem constraints:
@@ -51,16 +53,21 @@ IMPORTANT: Math problem constraints:
 IMPORTANT: Game loop uses `withFrameNanos` for 60fps synchronization
 
 IMPORTANT: Screen layout is 60/40 split:
-- Top 60%: Game view (bird, pipes, score, math problem)
-- Bottom 40%: Numeric keypad input
+- Top 60%: Game view (bird, pipes, score)
+- Bottom 40%: Numeric keypad input with math problem displayed above it
+- Math problem is at the bottom of the game view (just above the keypad)
 
 ## Math Problem Tiers
 | Tier | Score | Operations |
 |------|-------|------------|
-| 1 | 0-19 | Easy Addition (single digits: 1-9) |
-| 2 | 20-39 | +/- (2 digits) |
-| 3 | 40-59 | + Multiplication (1d x 1d) |
-| 4 | 60+ | + Division, harder problems |
+| 1 | 0-7 | Easy Addition (single digits: 1-9) |
+| 2 | 8-15 | +/- (2d + 1d, gentler progression) |
+| 3 | 16-24 | + Multiplication (1d x 1d) |
+| 4 | 25+ | + Division, harder problems |
+
+## Features (v1.1)
+- Top 10 leaderboard (persisted locally)
+- Gentler difficulty curve with mixed-digit tier
 
 ## Testing Checklist
 - [ ] Bird floats gently (not too fast fall)
@@ -68,4 +75,5 @@ IMPORTANT: Screen layout is 60/40 split:
 - [ ] Wrong answer clears input, no penalty
 - [ ] Score increments on passing pipes
 - [ ] High score persists across sessions
+- [ ] Top 10 scores displayed on game over
 - [ ] 60fps on target devices

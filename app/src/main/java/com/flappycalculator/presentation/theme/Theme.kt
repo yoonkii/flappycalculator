@@ -64,7 +64,7 @@ fun FlappyCalculatorTheme(
             window.statusBarColor = SkyBlue.toArgb()
             window.navigationBarColor = KeypadBackground.toArgb()
             WindowCompat.getInsetsController(window, view).apply {
-                isAppearanceLightStatusBars = true
+                isAppearanceLightStatusBars = false
                 isAppearanceLightNavigationBars = false
             }
         }

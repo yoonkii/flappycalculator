@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import com.flappycalculator.domain.model.Bird
 import com.flappycalculator.domain.model.Pipe
 import com.flappycalculator.presentation.theme.*
-import kotlin.random.Random
+
 
 /**
  * Main game canvas that renders the bird, pipes, and background.
@@ -86,7 +86,9 @@ private fun DrawScope.drawWallStreetBackground() {
         // Window lights (gold dots)
         val windowRows = (buildingHeight / 40).toInt()
         for (row in 0 until windowRows) {
-            if (Random.nextFloat() > 0.3f) {  // 70% chance of lit window
+            // Deterministic hash for stable window pattern (no per-frame flicker)
+            val hash = ((index * 31 + row * 17) % 100 + 100) % 100
+            if (hash < 70) {  // 70% of windows are lit
                 drawRect(
                     color = WindowGold.copy(alpha = 0.8f),
                     topLeft = Offset(
@@ -122,27 +124,6 @@ private fun DrawScope.drawWallStreetBackground() {
         color = Color(0xFF718096)
     )
 
-    // Stock ticker bar at top
-    drawRect(
-        color = Color(0xFF1A202C),
-        topLeft = Offset(0f, 0f),
-        size = Size(size.width, 24f)
-    )
-
-    // Ticker symbols (simplified)
-    val tickerColors = listOf(TerminalGreen, StockRed, TerminalGreen, TerminalGreen, StockRed, TerminalGreen)
-    tickerColors.forEachIndexed { index, color ->
-        drawRect(
-            color = color,
-            topLeft = Offset(20f + index * 60f, 8f),
-            size = Size(40f, 3f)
-        )
-        drawRect(
-            color = color,
-            topLeft = Offset(30f + index * 60f, 14f),
-            size = Size(25f, 3f)
-        )
-    }
 }
 
 /**

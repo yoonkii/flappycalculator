@@ -74,7 +74,8 @@ class PipeSpawner(
             ?: return true
 
         // Spawn new pipe when rightmost pipe has moved enough
-        return rightmostPipe.x <= screenWidth - GameConfig.PIPE_SPACING
+        val spacing = screenWidth * GameConfig.PIPE_SPACING_RATIO
+        return rightmostPipe.x <= screenWidth - spacing
     }
 
     /**

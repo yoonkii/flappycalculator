@@ -26,15 +26,16 @@ enum class DifficultyTier(
     ),
 
     /**
-     * Tier 2: Addition and subtraction with 2-digit numbers.
+     * Tier 2: Addition and subtraction with mixed digits (2d + 1d).
      * Score range: 8-15
+     * Uses one two-digit number and one single-digit number for gentler progression.
      */
     TIER_2(
         minScore = 8,
         maxScore = 15,
         availableOperators = listOf(Operator.ADD, Operator.SUBTRACT),
-        maxDigits = 2,  // Up to 2 digits now
-        description = "Addition & Subtraction (2 digits)"
+        maxDigits = 2,  // Mixed: one 2-digit, one 1-digit
+        description = "Addition & Subtraction (2d + 1d)"
     ),
 
     /**

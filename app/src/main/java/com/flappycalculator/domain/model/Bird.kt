@@ -105,7 +105,9 @@ data class Bird(
          * @return New Bird instance at starting position
          */
         fun createAtStart(screenWidth: Float, screenHeight: Float): Bird {
-            val birdWidth = screenWidth * GameConfig.BIRD_SIZE_RATIO
+            // Use the smaller dimension as reference to prevent oversized bird on foldables
+            val referenceDimension = minOf(screenWidth, screenHeight)
+            val birdWidth = referenceDimension * GameConfig.BIRD_SIZE_RATIO
             val birdHeight = birdWidth * GameConfig.BIRD_ASPECT_RATIO
             val birdX = screenWidth * GameConfig.BIRD_X_POSITION_RATIO
             val birdY = screenHeight / 2  // Start at center
