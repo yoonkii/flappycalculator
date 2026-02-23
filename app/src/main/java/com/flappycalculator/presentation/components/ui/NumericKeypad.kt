@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.flappycalculator.presentation.theme.BackspaceButton
 import com.flappycalculator.presentation.theme.BackspaceButtonPressed
+import com.flappycalculator.presentation.theme.Dseg7FontFamily
 import com.flappycalculator.presentation.theme.KeypadBackground
 import com.flappycalculator.presentation.theme.KeypadButton as KeypadButtonColor
 import com.flappycalculator.presentation.theme.KeypadButtonPressed
@@ -189,7 +190,10 @@ private fun KeypadButton(
             color = textColor,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold,
-            fontFamily = MaterialTheme.typography.labelLarge.fontFamily
+            fontFamily = when (key) {
+                is KeypadKey.Digit -> Dseg7FontFamily
+                else -> MaterialTheme.typography.labelLarge.fontFamily
+            }
         )
     }
 }

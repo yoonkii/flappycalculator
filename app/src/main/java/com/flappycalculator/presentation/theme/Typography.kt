@@ -2,13 +2,20 @@ package com.flappycalculator.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.flappycalculator.R
 
-// Use system monospace font which has a calculator-like appearance
-// This is reliable and doesn't require external font loading
+// System monospace for general UI text
 val GameFontFamily = FontFamily.Monospace
+
+// DSEG7 Classic Bold - 7-segment LCD font for numeric displays (score, input, keypad)
+val Dseg7FontFamily = FontFamily(Font(R.font.dseg7_classic_bold, FontWeight.Bold))
+
+// DSEG14 Classic Bold - 14-segment LCD font for math problems (supports +, -, =, ?)
+val Dseg14FontFamily = FontFamily(Font(R.font.dseg14_classic_bold, FontWeight.Bold))
 
 val GameTypography = Typography(
     // Large display text (Score display, Game Over)

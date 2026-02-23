@@ -13,6 +13,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.flappycalculator.presentation.theme.Dseg7FontFamily
 import com.flappycalculator.presentation.theme.ScoreWhite
 
 /**
@@ -27,7 +28,7 @@ fun ScoreDisplay(
     val textStyle = TextStyle(
         fontSize = 36.sp,
         fontWeight = FontWeight.Bold,
-        fontFamily = MaterialTheme.typography.displayMedium.fontFamily
+        fontFamily = Dseg7FontFamily
     )
 
     Box(modifier = modifier.padding(8.dp)) {

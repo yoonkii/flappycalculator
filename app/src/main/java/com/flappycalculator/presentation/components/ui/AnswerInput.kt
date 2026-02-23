@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.flappycalculator.domain.model.InputFeedback
 import com.flappycalculator.presentation.theme.*
+import com.flappycalculator.presentation.theme.Dseg7FontFamily
 
 /**
  * Display field for the current answer input.
@@ -101,7 +102,7 @@ fun AnswerInput(
                 color = InputText,
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
-                fontFamily = MaterialTheme.typography.displaySmall.fontFamily,
+                fontFamily = Dseg7FontFamily,
                 textAlign = TextAlign.Center
             )
         }
@@ -130,7 +131,7 @@ fun AnswerInput(
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Transparent,
-                    fontFamily = MaterialTheme.typography.displaySmall.fontFamily
+                    fontFamily = Dseg7FontFamily
                 )
                 // Cursor
                 Text(
@@ -138,7 +139,7 @@ fun AnswerInput(
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold,
                     color = InputText.copy(alpha = cursorAlpha),
-                    fontFamily = MaterialTheme.typography.displaySmall.fontFamily
+                    fontFamily = Dseg7FontFamily
                 )
             }
         }

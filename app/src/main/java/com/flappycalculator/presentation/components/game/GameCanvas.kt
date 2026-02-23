@@ -144,37 +144,30 @@ private fun DrawScope.drawStockBar(pipe: Pipe, screenHeight: Float) {
     val capOffset = (capWidth - pipe.width) / 2
     val wickWidth = pipe.width * 0.1f
 
-    // Draw top bar (candlestick style)
+    // Draw top bar — extends off-screen at top, cap only at gap-facing end
 
-    // Wick (thin line at top)
-    drawRect(
-        color = darkColor,
-        topLeft = Offset(pipe.x + pipe.width / 2 - wickWidth / 2, 0f),
-        size = Size(wickWidth, 20f)
-    )
-
-    // Main body
+    // Main body (from top of screen to just above cap)
     drawRect(
         color = mainColor,
-        topLeft = Offset(pipe.x, 20f),
-        size = Size(pipe.width, gapTop - capHeight - 20f)
+        topLeft = Offset(pipe.x, 0f),
+        size = Size(pipe.width, gapTop - capHeight)
     )
 
     // Highlight (left edge)
     drawRect(
         color = lightColor,
-        topLeft = Offset(pipe.x, 20f),
-        size = Size(pipe.width * 0.15f, gapTop - capHeight - 20f)
+        topLeft = Offset(pipe.x, 0f),
+        size = Size(pipe.width * 0.15f, gapTop - capHeight)
     )
 
     // Shadow (right edge)
     drawRect(
         color = darkColor,
-        topLeft = Offset(pipe.x + pipe.width * 0.85f, 20f),
-        size = Size(pipe.width * 0.15f, gapTop - capHeight - 20f)
+        topLeft = Offset(pipe.x + pipe.width * 0.85f, 0f),
+        size = Size(pipe.width * 0.15f, gapTop - capHeight)
     )
 
-    // Top cap
+    // Cap (gap-facing end only)
     drawRect(
         color = mainColor,
         topLeft = Offset(pipe.x - capOffset, gapTop - capHeight),
@@ -199,9 +192,9 @@ private fun DrawScope.drawStockBar(pipe: Pipe, screenHeight: Float) {
         gridY += gridSpacing
     }
 
-    // Draw bottom bar
+    // Draw bottom bar — cap at gap-facing end, extends off-screen at bottom
 
-    // Bottom cap
+    // Cap (gap-facing end only)
     drawRect(
         color = mainColor,
         topLeft = Offset(pipe.x - capOffset, gapBottom),
@@ -213,37 +206,30 @@ private fun DrawScope.drawStockBar(pipe: Pipe, screenHeight: Float) {
         size = Size(capWidth * 0.15f, capHeight)
     )
 
-    // Main body
+    // Main body (from below cap to bottom of screen)
     drawRect(
         color = mainColor,
         topLeft = Offset(pipe.x, gapBottom + capHeight),
-        size = Size(pipe.width, screenHeight - gapBottom - capHeight - 20f)
+        size = Size(pipe.width, screenHeight - gapBottom - capHeight)
     )
 
     // Highlight
     drawRect(
         color = lightColor,
         topLeft = Offset(pipe.x, gapBottom + capHeight),
-        size = Size(pipe.width * 0.15f, screenHeight - gapBottom - capHeight - 20f)
+        size = Size(pipe.width * 0.15f, screenHeight - gapBottom - capHeight)
     )
 
     // Shadow
     drawRect(
         color = darkColor,
         topLeft = Offset(pipe.x + pipe.width * 0.85f, gapBottom + capHeight),
-        size = Size(pipe.width * 0.15f, screenHeight - gapBottom - capHeight - 20f)
-    )
-
-    // Wick (thin line at bottom)
-    drawRect(
-        color = darkColor,
-        topLeft = Offset(pipe.x + pipe.width / 2 - wickWidth / 2, screenHeight - 20f),
-        size = Size(wickWidth, 20f)
+        size = Size(pipe.width * 0.15f, screenHeight - gapBottom - capHeight)
     )
 
     // Grid lines for bottom
     gridY = gapBottom + capHeight + gridSpacing
-    while (gridY < screenHeight - 20f) {
+    while (gridY < screenHeight) {
         drawLine(
             color = darkColor.copy(alpha = 0.5f),
             start = Offset(pipe.x, gridY),
