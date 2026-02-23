@@ -1,8 +1,10 @@
 package com.flappycalculator.util
 
 import android.content.Context
+import android.content.res.AssetFileDescriptor
 import android.media.AudioAttributes
 import android.media.AudioManager
+import android.media.MediaPlayer
 import android.media.SoundPool
 import android.media.ToneGenerator
 import kotlinx.coroutines.CoroutineScope
@@ -16,6 +18,8 @@ import kotlinx.coroutines.launch
  */
 class SoundManager(context: Context) {
 
+    private val appContext = context.applicationContext
+
     private val toneGenerator: ToneGenerator? = try {
         ToneGenerator(AudioManager.STREAM_MUSIC, 100)
     } catch (e: Exception) {
@@ -26,6 +30,15 @@ class SoundManager(context: Context) {
     private val sounds = mutableMapOf<Sound, Int>()
     private var isLoaded = false
     private val scope = CoroutineScope(Dispatchers.Default)
+
+    private var bgmPlayer: MediaPlayer? = null
+    private var gameOverPlayer: MediaPlayer? = null
+    private var fadeOutJob: kotlinx.coroutines.Job? = null
+    private val bgmFiles = listOf(
+        "bgm/flappy_calculator_bgm_1.wav",
+        "bgm/flappy_calculator_bgm_2.wav"
+    )
+    private val gameOverMusic = "bgm/Game Over, Try Again.wav"
 
     init {
         val audioAttributes = AudioAttributes.Builder()
@@ -160,10 +173,121 @@ class SoundManager(context: Context) {
     }
 
     /**
+     * Start playing a randomly selected BGM track, looping.
+     */
+    fun startBgm() {
+        stopBgm()
+        try {
+            val track = bgmFiles.random()
+            val afd: AssetFileDescriptor = appContext.assets.openFd(track)
+            bgmPlayer = MediaPlayer().apply {
+                setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_GAME)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .build()
+                )
+                setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
+                afd.close()
+                isLooping = true
+                setVolume(0.5f, 0.5f)
+                prepare()
+                start()
+            }
+        } catch (e: Exception) {
+            // BGM not critical — ignore errors
+            bgmPlayer?.release()
+            bgmPlayer = null
+        }
+    }
+
+    /**
+     * Play the game over music (single play, no loop).
+     */
+    fun playGameOverMusic() {
+        stopGameOverMusic(immediate = true)
+        try {
+            val afd: AssetFileDescriptor = appContext.assets.openFd(gameOverMusic)
+            gameOverPlayer = MediaPlayer().apply {
+                setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_GAME)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .build()
+                )
+                setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
+                afd.close()
+                isLooping = false
+                setVolume(0.6f, 0.6f)
+                prepare()
+                start()
+            }
+            // Auto fade-out after 3 seconds
+            stopGameOverMusic(immediate = false)
+        } catch (e: Exception) {
+            gameOverPlayer?.release()
+            gameOverPlayer = null
+        }
+    }
+
+    /**
+     * Stop game over music with a 3-second fade-out, or immediately.
+     */
+    fun stopGameOverMusic(immediate: Boolean = false) {
+        fadeOutJob?.cancel()
+        if (immediate) {
+            releaseGameOverPlayer()
+        } else {
+            val player = gameOverPlayer ?: return
+            fadeOutJob = scope.launch {
+                val steps = 30
+                val intervalMs = 3000L / steps
+                for (i in steps downTo 0) {
+                    try {
+                        val vol = (i.toFloat() / steps) * 0.6f
+                        player.setVolume(vol, vol)
+                    } catch (_: Exception) { break }
+                    kotlinx.coroutines.delay(intervalMs)
+                }
+                releaseGameOverPlayer()
+            }
+        }
+    }
+
+    private fun releaseGameOverPlayer() {
+        try {
+            gameOverPlayer?.apply {
+                if (isPlaying) stop()
+                release()
+            }
+        } catch (_: Exception) { }
+        gameOverPlayer = null
+    }
+
+    /**
+     * Stop BGM playback.
+     */
+    fun stopBgm() {
+        try {
+            bgmPlayer?.apply {
+                if (isPlaying) stop()
+                release()
+            }
+        } catch (_: Exception) { }
+        bgmPlayer = null
+    }
+
+    /**
      * Release resources.
      * Call when the game is destroyed.
      */
+    fun stopAll() {
+        stopBgm()
+        stopGameOverMusic(immediate = true)
+    }
+
     fun release() {
+        stopAll()
         soundPool.release()
         sounds.clear()
         toneGenerator?.release()

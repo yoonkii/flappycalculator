@@ -77,6 +77,8 @@ class GameViewModel(
         if (_uiState.value.gameState != GameState.READY) return
 
         gameEngine.start()
+        soundManager?.stopGameOverMusic()
+        soundManager?.startBgm()
 
         // Update UI state to PLAYING before starting the loop
         _uiState.update { it.copy(gameState = GameState.PLAYING) }
@@ -160,6 +162,8 @@ class GameViewModel(
      */
     fun resetGame() {
         gameLoopJob?.cancel()
+        soundManager?.stopBgm()
+        soundManager?.stopGameOverMusic()
         gameEngine.reset()
         lastFrameTimeNanos = 0L
 
@@ -220,7 +224,9 @@ class GameViewModel(
 
                 // Handle game over
                 if (snapshot.gameState == GameState.GAME_OVER) {
+                    soundManager?.stopBgm()
                     soundManager?.playHit()
+                    soundManager?.playGameOverMusic()
                     handleGameOver(snapshot.score)
                     break
                 }
@@ -261,6 +267,5 @@ class GameViewModel(
     override fun onCleared() {
         super.onCleared()
         gameLoopJob?.cancel()
-        soundManager?.release()
     }
 }

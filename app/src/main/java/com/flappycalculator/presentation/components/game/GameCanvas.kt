@@ -1,16 +1,22 @@
 package com.flappycalculator.presentation.components.game
 
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
+import com.flappycalculator.R
 import com.flappycalculator.domain.model.Bird
+import com.flappycalculator.domain.model.GameConfig
 import com.flappycalculator.domain.model.Pipe
 import com.flappycalculator.presentation.theme.*
 
@@ -25,21 +31,77 @@ fun GameCanvas(
     pipes: List<Pipe>,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
+
+    // Load background bitmap once
+    val bgBitmap = remember {
+        BitmapFactory.decodeResource(context.resources, R.drawable.bg_skyline).asImageBitmap()
+    }
+
+    // Load character sprites once
+    val charDefault = remember {
+        BitmapFactory.decodeResource(context.resources, R.drawable.char_default).asImageBitmap()
+    }
+    val charJump2 = remember {
+        BitmapFactory.decodeResource(context.resources, R.drawable.char_jump_2).asImageBitmap()
+    }
+    val charJump3 = remember {
+        BitmapFactory.decodeResource(context.resources, R.drawable.char_jump_3).asImageBitmap()
+    }
+    val charFall = remember {
+        BitmapFactory.decodeResource(context.resources, R.drawable.char_fall).asImageBitmap()
+    }
+
+    // Select sprite based on bird velocity
+    val selectedSprite = when {
+        bird.velocity < -200f -> charJump3   // Strong upward, arms high
+        bird.velocity < 0f -> charJump2      // Rising
+        bird.velocity < 150f -> charDefault  // Neutral/gliding
+        else -> charFall                     // Falling
+    }
+
+    // Continuous background scroll animation (runs in all game states)
+    var bgOffset by remember { mutableFloatStateOf(0f) }
+    LaunchedEffect(Unit) {
+        var lastNanos = System.nanoTime()
+        while (true) {
+            withFrameNanos { nanos ->
+                val dt = (nanos - lastNanos) / 1_000_000_000f
+                lastNanos = nanos
+                bgOffset += GameConfig.BACKGROUND_SCROLL_SPEED * dt
+            }
+        }
+    }
+
     Canvas(
         modifier = modifier.background(SkyBlue)
     ) {
         val canvasHeight = size.height
 
-        // Draw Wall Street background (night skyline)
-        drawWallStreetBackground()
+        // Draw scrolling background
+        drawScrollingBackground(bgBitmap, bgOffset)
 
         // Draw all pipes as stock bars
         pipes.forEach { pipe ->
             drawStockBar(pipe, canvasHeight)
         }
 
-        // Draw business analyst bird
-        drawAnalyst(bird)
+        // Draw character sprite at scaled size (centered on bird position)
+        val spriteW = bird.width * GameConfig.BIRD_SPRITE_SCALE
+        val spriteH = bird.height * GameConfig.BIRD_SPRITE_SCALE
+        rotate(
+            degrees = bird.rotation,
+            pivot = Offset(bird.x, bird.y)
+        ) {
+            drawImage(
+                image = selectedSprite,
+                dstOffset = IntOffset(
+                    (bird.x - spriteW / 2).toInt(),
+                    (bird.y - spriteH / 2).toInt()
+                ),
+                dstSize = IntSize(spriteW.toInt(), spriteH.toInt())
+            )
+        }
 
         // Draw trading floor ground
         drawTradingFloor(canvasHeight)
@@ -47,83 +109,28 @@ fun GameCanvas(
 }
 
 /**
- * Draw the Wall Street night skyline background.
+ * Draw the scrolling NYC skyline background.
+ * Scales image to fill canvas height and tiles horizontally.
  */
-private fun DrawScope.drawWallStreetBackground() {
-    // Night sky gradient
-    val skyColors = listOf(
-        Color(0xFF0D1B2A),  // Dark blue at top
-        Color(0xFF1B263B),  // Mid blue
-        Color(0xFF152238),  // Darker blue
-        Color(0xFF1A202C)   // Nearly black at horizon
-    )
+private fun DrawScope.drawScrollingBackground(bitmap: ImageBitmap, offset: Float) {
+    val scale = size.height / bitmap.height.toFloat()
+    val scaledWidth = (bitmap.width * scale).toInt()
+    val scaledHeight = size.height.toInt()
+    val canvasWidth = size.width.toInt()
 
-    val bandHeight = size.height / 4
-    skyColors.forEachIndexed { index, color ->
-        drawRect(
-            color = color,
-            topLeft = Offset(0f, bandHeight * index),
-            size = Size(size.width, bandHeight)
+    // Wrap offset to prevent float precision loss over time
+    val wrappedOffset = (offset % scaledWidth.toFloat()).toInt()
+
+    // Draw enough copies to cover the full canvas width
+    var x = -wrappedOffset
+    while (x < canvasWidth) {
+        drawImage(
+            image = bitmap,
+            dstOffset = IntOffset(x, 0),
+            dstSize = IntSize(scaledWidth, scaledHeight)
         )
+        x += scaledWidth
     }
-
-    // Draw distant buildings (simple silhouettes)
-    val buildingColor = Color(0xFF2D3748)
-    val buildingHeights = listOf(0.35f, 0.45f, 0.3f, 0.55f, 0.4f, 0.5f, 0.35f, 0.6f, 0.45f, 0.38f)
-    val buildingWidth = size.width / buildingHeights.size
-
-    buildingHeights.forEachIndexed { index, heightRatio ->
-        val buildingHeight = size.height * heightRatio
-        val buildingTop = size.height - buildingHeight - 10f
-
-        // Building body
-        drawRect(
-            color = buildingColor,
-            topLeft = Offset(index * buildingWidth, buildingTop),
-            size = Size(buildingWidth - 4f, buildingHeight)
-        )
-
-        // Window lights (gold dots)
-        val windowRows = (buildingHeight / 40).toInt()
-        for (row in 0 until windowRows) {
-            // Deterministic hash for stable window pattern (no per-frame flicker)
-            val hash = ((index * 31 + row * 17) % 100 + 100) % 100
-            if (hash < 70) {  // 70% of windows are lit
-                drawRect(
-                    color = WindowGold.copy(alpha = 0.8f),
-                    topLeft = Offset(
-                        index * buildingWidth + buildingWidth / 2 - 3f,
-                        buildingTop + 20f + row * 35f
-                    ),
-                    size = Size(6f, 8f)
-                )
-            }
-        }
-    }
-
-    // Freedom Tower silhouette (tallest building)
-    val towerWidth = size.width * 0.04f
-    val towerX = size.width * 0.5f - towerWidth / 2
-    val towerBottom = size.height * 0.4f
-
-    drawRect(
-        color = Color(0xFF4A5568),
-        topLeft = Offset(towerX, size.height * 0.15f),
-        size = Size(towerWidth, towerBottom - size.height * 0.15f)
-    )
-
-    // Tower spire
-    val spireTop = size.height * 0.08f
-    drawPath(
-        path = Path().apply {
-            moveTo(towerX + towerWidth / 2, spireTop)
-            lineTo(towerX, size.height * 0.15f)
-            lineTo(towerX + towerWidth, size.height * 0.15f)
-            close()
-        },
-        color = Color(0xFF718096)
-    )
-
 }
 
 /**
@@ -237,178 +244,6 @@ private fun DrawScope.drawStockBar(pipe: Pipe, screenHeight: Float) {
             strokeWidth = 1f
         )
         gridY += gridSpacing
-    }
-}
-
-/**
- * Draw the business analyst character.
- */
-private fun DrawScope.drawAnalyst(bird: Bird) {
-    rotate(
-        degrees = bird.rotation,
-        pivot = Offset(bird.x, bird.y)
-    ) {
-        val centerX = bird.x
-        val centerY = bird.y
-        val width = bird.width
-        val height = bird.height
-
-        // Body (suit jacket) - navy blue
-        drawRect(
-            color = SuitNavy,
-            topLeft = Offset(centerX - width * 0.35f, centerY - height * 0.1f),
-            size = Size(width * 0.7f, height * 0.5f)
-        )
-
-        // Suit lapels
-        drawPath(
-            path = Path().apply {
-                moveTo(centerX - width * 0.2f, centerY - height * 0.1f)
-                lineTo(centerX, centerY + height * 0.15f)
-                lineTo(centerX, centerY + height * 0.4f)
-                lineTo(centerX - width * 0.2f, centerY + height * 0.4f)
-                close()
-            },
-            color = SuitNavyLight
-        )
-        drawPath(
-            path = Path().apply {
-                moveTo(centerX + width * 0.2f, centerY - height * 0.1f)
-                lineTo(centerX, centerY + height * 0.15f)
-                lineTo(centerX, centerY + height * 0.4f)
-                lineTo(centerX + width * 0.2f, centerY + height * 0.4f)
-                close()
-            },
-            color = SuitNavyLight
-        )
-
-        // White shirt
-        drawRect(
-            color = ShirtWhite,
-            topLeft = Offset(centerX - width * 0.1f, centerY - height * 0.1f),
-            size = Size(width * 0.2f, height * 0.35f)
-        )
-
-        // Red tie
-        drawPath(
-            path = Path().apply {
-                moveTo(centerX - width * 0.05f, centerY - height * 0.1f)
-                lineTo(centerX + width * 0.05f, centerY - height * 0.1f)
-                lineTo(centerX + width * 0.06f, centerY + height * 0.3f)
-                lineTo(centerX, centerY + height * 0.38f)
-                lineTo(centerX - width * 0.06f, centerY + height * 0.3f)
-                close()
-            },
-            color = TieRed
-        )
-
-        // Head
-        drawOval(
-            color = SkinTone,
-            topLeft = Offset(centerX - width * 0.3f, centerY - height * 0.5f),
-            size = Size(width * 0.6f, height * 0.45f)
-        )
-
-        // Hair
-        drawArc(
-            color = HairDark,
-            startAngle = 180f,
-            sweepAngle = 180f,
-            useCenter = true,
-            topLeft = Offset(centerX - width * 0.32f, centerY - height * 0.55f),
-            size = Size(width * 0.64f, height * 0.25f)
-        )
-
-        // Eyes
-        val eyeSize = width * 0.1f
-        val eyeY = centerY - height * 0.3f
-
-        // Left eye
-        drawCircle(
-            color = Color.White,
-            radius = eyeSize,
-            center = Offset(centerX - width * 0.12f, eyeY)
-        )
-        drawCircle(
-            color = Color.Black,
-            radius = eyeSize * 0.5f,
-            center = Offset(centerX - width * 0.1f, eyeY)
-        )
-
-        // Right eye
-        drawCircle(
-            color = Color.White,
-            radius = eyeSize,
-            center = Offset(centerX + width * 0.12f, eyeY)
-        )
-        drawCircle(
-            color = Color.Black,
-            radius = eyeSize * 0.5f,
-            center = Offset(centerX + width * 0.14f, eyeY)
-        )
-
-        // Determined smile
-        drawArc(
-            color = Color(0xFF8B4513),
-            startAngle = 0f,
-            sweepAngle = 180f,
-            useCenter = false,
-            topLeft = Offset(centerX - width * 0.1f, centerY - height * 0.2f),
-            size = Size(width * 0.2f, height * 0.1f)
-        )
-
-        // Arms (based on velocity - up when rising, down when falling)
-        val armAngle = if (bird.velocity < 0) -30f else 30f
-        val armColor = SuitNavy
-
-        // Left arm
-        rotate(armAngle, Offset(centerX - width * 0.35f, centerY)) {
-            drawRect(
-                color = armColor,
-                topLeft = Offset(centerX - width * 0.55f, centerY - height * 0.05f),
-                size = Size(width * 0.25f, height * 0.15f)
-            )
-            // Hand
-            drawCircle(
-                color = SkinTone,
-                radius = width * 0.08f,
-                center = Offset(centerX - width * 0.55f, centerY)
-            )
-        }
-
-        // Right arm
-        rotate(-armAngle, Offset(centerX + width * 0.35f, centerY)) {
-            drawRect(
-                color = armColor,
-                topLeft = Offset(centerX + width * 0.3f, centerY - height * 0.05f),
-                size = Size(width * 0.25f, height * 0.15f)
-            )
-            // Hand
-            drawCircle(
-                color = SkinTone,
-                radius = width * 0.08f,
-                center = Offset(centerX + width * 0.55f, centerY)
-            )
-        }
-
-        // Briefcase (below the analyst)
-        drawRect(
-            color = Color(0xFF8B4513),  // Brown
-            topLeft = Offset(centerX - width * 0.2f, centerY + height * 0.4f),
-            size = Size(width * 0.4f, height * 0.2f)
-        )
-        // Briefcase handle
-        drawRect(
-            color = GoldAccent,
-            topLeft = Offset(centerX - width * 0.08f, centerY + height * 0.38f),
-            size = Size(width * 0.16f, height * 0.05f)
-        )
-        // Briefcase latch
-        drawRect(
-            color = GoldAccent,
-            topLeft = Offset(centerX - width * 0.05f, centerY + height * 0.48f),
-            size = Size(width * 0.1f, height * 0.04f)
-        )
     }
 }
 

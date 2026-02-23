@@ -29,6 +29,7 @@ import com.flappycalculator.util.SoundManager
 @Composable
 fun GameScreen(
     onGameOver: (score: Int, highScore: Int, isNewHighScore: Boolean) -> Unit,
+    soundManager: SoundManager,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -37,7 +38,6 @@ fun GameScreen(
     val viewModel = remember {
         val prefs = ScorePreferences(context)
         val repo = ScoreRepository(prefs)
-        val soundManager = SoundManager(context)
         GameViewModel(repo, soundManager)
     }
 

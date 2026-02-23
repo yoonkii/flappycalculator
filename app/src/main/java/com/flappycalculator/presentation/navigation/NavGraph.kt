@@ -1,7 +1,13 @@
 package com.flappycalculator.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -11,6 +17,7 @@ import androidx.navigation.navArgument
 import com.flappycalculator.presentation.screens.game.GameScreen
 import com.flappycalculator.presentation.screens.gameover.GameOverScreen
 import com.flappycalculator.presentation.screens.title.TitleScreen
+import com.flappycalculator.util.SoundManager
 
 /**
  * Navigation routes for the app.
@@ -34,6 +41,22 @@ fun FlappyCalculatorNavHost(
     navController: NavHostController = rememberNavController(),
     startDestination: String = Routes.TITLE
 ) {
+    val context = LocalContext.current
+    val soundManager = remember { SoundManager(context) }
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                soundManager.stopAll()
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+            soundManager.release()
+        }
+    }
+
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -54,6 +77,7 @@ fun FlappyCalculatorNavHost(
         // Game Screen
         composable(Routes.GAME) {
             GameScreen(
+                soundManager = soundManager,
                 onGameOver = { score, highScore, isNewHighScore ->
                     navController.navigate(Routes.gameOver(score, highScore, isNewHighScore)) {
                         // Pop game from back stack
@@ -81,11 +105,13 @@ fun FlappyCalculatorNavHost(
                 highScore = highScore,
                 isNewHighScore = isNewHighScore,
                 onRetry = {
+                    soundManager.stopGameOverMusic()
                     navController.navigate(Routes.GAME) {
                         popUpTo(Routes.TITLE) { inclusive = false }
                     }
                 },
                 onMenu = {
+                    soundManager.stopGameOverMusic()
                     navController.navigate(Routes.TITLE) {
                         popUpTo(Routes.TITLE) { inclusive = true }
                     }

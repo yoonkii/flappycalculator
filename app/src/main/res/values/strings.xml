@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Finance Bird</string>
+    <string name="app_name">Flappy Calculator</string>
     <string name="title_tap_to_start">Tap to Start</string>
     <string name="title_high_score">High Score: %d</string>
     <string name="game_score">Score: %d</string>

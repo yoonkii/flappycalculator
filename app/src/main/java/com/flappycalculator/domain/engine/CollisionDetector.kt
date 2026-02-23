@@ -7,16 +7,16 @@ import com.flappycalculator.domain.model.Pipe
 
 /**
  * Handles collision detection between game entities.
- * Uses AABB (Axis-Aligned Bounding Box) collision detection.
+ * Uses circle-vs-AABB for the bird and AABB for pipes.
  */
 class CollisionDetector {
 
-    // Reusable RectF objects to avoid allocations in hot path
-    private val birdBounds = RectF()
+    // Reusable RectF for pipe bounds to avoid allocations in hot path
     private val pipeBounds = RectF()
 
     /**
      * Check for collisions between bird and environment.
+     * Bird uses a circular hitbox; pipes use axis-aligned rectangles.
      *
      * @param bird Current bird state
      * @param pipes List of active pipes
@@ -28,12 +28,12 @@ class CollisionDetector {
         pipes: List<Pipe>,
         screenHeight: Float
     ): CollisionResult {
-        // Get bird bounds
-        val birdRect = bird.getBounds()
-        birdBounds.set(birdRect)
+        val cx = bird.x
+        val cy = bird.y
+        val r = bird.hitboxRadius
 
         // Check ceiling collision
-        if (birdBounds.top <= 0) {
+        if (cy - r <= 0) {
             return CollisionResult(
                 hitObstacle = true,
                 hitCeiling = true
@@ -41,24 +41,22 @@ class CollisionDetector {
         }
 
         // Check floor collision
-        if (birdBounds.bottom >= screenHeight) {
+        if (cy + r >= screenHeight) {
             return CollisionResult(
                 hitObstacle = true,
                 hitFloor = true
             )
         }
 
-        // Check pipe collisions
+        // Check pipe collisions (circle vs rect)
         for (pipe in pipes) {
-            // Check top pipe
             pipeBounds.set(pipe.getTopPipeBounds(screenHeight))
-            if (RectF.intersects(birdBounds, pipeBounds)) {
+            if (circleIntersectsRect(cx, cy, r, pipeBounds)) {
                 return CollisionResult(hitObstacle = true)
             }
 
-            // Check bottom pipe
             pipeBounds.set(pipe.getBottomPipeBounds(screenHeight))
-            if (RectF.intersects(birdBounds, pipeBounds)) {
+            if (circleIntersectsRect(cx, cy, r, pipeBounds)) {
                 return CollisionResult(hitObstacle = true)
             }
         }
@@ -99,14 +97,15 @@ class CollisionDetector {
     }
 
     /**
-     * Simple AABB intersection check.
-     * Used for external collision checks if needed.
-     *
-     * @param rect1 First rectangle
-     * @param rect2 Second rectangle
-     * @return true if rectangles overlap
+     * Circle-vs-AABB intersection test.
+     * Finds the closest point on the rectangle to the circle center,
+     * then checks if that point is within the circle's radius.
      */
-    fun checkIntersection(rect1: RectF, rect2: RectF): Boolean {
-        return RectF.intersects(rect1, rect2)
+    private fun circleIntersectsRect(cx: Float, cy: Float, r: Float, rect: RectF): Boolean {
+        val closestX = cx.coerceIn(rect.left, rect.right)
+        val closestY = cy.coerceIn(rect.top, rect.bottom)
+        val dx = cx - closestX
+        val dy = cy - closestY
+        return (dx * dx + dy * dy) <= r * r
     }
 }

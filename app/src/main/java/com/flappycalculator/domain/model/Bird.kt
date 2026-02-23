@@ -1,7 +1,5 @@
 package com.flappycalculator.domain.model
 
-import android.graphics.RectF
-
 /**
  * Represents the bird entity with physics properties.
  * Immutable data class - use copy() to create modified instances.
@@ -72,28 +70,23 @@ data class Bird(
     }
 
     /**
-     * Get the collision bounds rectangle.
-     *
-     * @return RectF representing the bird's hitbox
+     * Circular hitbox radius. Uses the smaller sprite dimension to inscribe
+     * the circle, then applies BIRD_HITBOX_RATIO to shrink it further.
      */
-    fun getBounds(): RectF {
-        return RectF(
-            x - width / 2,
-            y - height / 2,
-            x + width / 2,
-            y + height / 2
-        )
-    }
+    val hitboxRadius: Float
+        get() {
+            val spriteSize = minOf(width, height) * GameConfig.BIRD_SPRITE_SCALE
+            return (spriteSize / 2) * GameConfig.BIRD_HITBOX_RATIO
+        }
 
     /**
-     * Check if bird is within screen bounds.
+     * Check if bird is within screen bounds using circular hitbox.
      *
      * @param screenHeight Height of the game area
      * @return true if bird is within bounds
      */
     fun isWithinBounds(screenHeight: Float): Boolean {
-        val bounds = getBounds()
-        return bounds.top > 0 && bounds.bottom < screenHeight
+        return (y - hitboxRadius) > 0 && (y + hitboxRadius) < screenHeight
     }
 
     companion object {

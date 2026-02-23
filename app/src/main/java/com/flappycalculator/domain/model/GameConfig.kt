@@ -25,13 +25,18 @@ object GameConfig {
 
     // Bird configuration
     const val BIRD_X_POSITION_RATIO = 0.2f      // bird X position = 20% from left edge
-    const val BIRD_SIZE_RATIO = 0.08f           // bird width = 8% of screen width
+    const val BIRD_SIZE_RATIO = 0.08f           // bird width = 8% of screen width (base/logical size)
     const val BIRD_ASPECT_RATIO = 1.0f          // bird height/width ratio
+    const val BIRD_SPRITE_SCALE = 2.0f          // sprite renders at 2x logical size
+    const val BIRD_HITBOX_RATIO = 0.9f          // hitbox = 90% of visual sprite size
 
     // Timing
     const val TARGET_FPS = 60
     const val FRAME_TIME_MS = 1000L / TARGET_FPS
     const val MAX_DELTA_TIME = 0.05f            // cap delta time to prevent physics explosions
+
+    // Background
+    const val BACKGROUND_SCROLL_SPEED = 20f  // pixels/sec (slow parallax)
 
     // Rotation
     const val MAX_ROTATION_DOWN = 45f           // max downward rotation (degrees)
