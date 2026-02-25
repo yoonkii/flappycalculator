@@ -29,7 +29,7 @@ class CollisionDetector {
         screenHeight: Float
     ): CollisionResult {
         val cx = bird.x
-        val cy = bird.y
+        val cy = bird.hitboxCenterY
         val r = bird.hitboxRadius
 
         // Check ceiling collision

@@ -79,6 +79,10 @@ data class Bird(
             return (spriteSize / 2) * GameConfig.BIRD_HITBOX_RATIO
         }
 
+    /** Hitbox center Y, shifted upward for more forgiveness at the bottom. */
+    val hitboxCenterY: Float
+        get() = y + hitboxRadius * GameConfig.BIRD_HITBOX_Y_OFFSET_RATIO
+
     /**
      * Check if bird is within screen bounds using circular hitbox.
      *
@@ -86,7 +90,8 @@ data class Bird(
      * @return true if bird is within bounds
      */
     fun isWithinBounds(screenHeight: Float): Boolean {
-        return (y - hitboxRadius) > 0 && (y + hitboxRadius) < screenHeight
+        val cy = hitboxCenterY
+        return (cy - hitboxRadius) > 0 && (cy + hitboxRadius) < screenHeight
     }
 
     companion object {
