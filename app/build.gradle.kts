@@ -21,7 +21,7 @@ android {
     signingConfigs {
         create("release") {
             if (keystorePropertiesFile.exists()) {
-                storeFile = file(keystoreProperties["storeFile"] as String)
+                storeFile = rootProject.file(keystoreProperties["storeFile"] as String)
                 storePassword = keystoreProperties["storePassword"] as String
                 keyAlias = keystoreProperties["keyAlias"] as String
                 keyPassword = keystoreProperties["keyPassword"] as String
@@ -33,8 +33,8 @@ android {
         applicationId = "com.flappycalculator"
         minSdk = 26
         targetSdk = 35
-        versionCode = 4
-        versionName = "1.1.2"
+        versionCode = 5
+        versionName = "1.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

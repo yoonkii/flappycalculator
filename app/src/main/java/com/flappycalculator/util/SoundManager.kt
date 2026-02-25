@@ -281,6 +281,16 @@ class SoundManager(context: Context) {
      * Release resources.
      * Call when the game is destroyed.
      */
+    fun pauseAll() {
+        try { bgmPlayer?.takeIf { it.isPlaying }?.pause() } catch (_: Exception) { }
+        try { gameOverPlayer?.takeIf { it.isPlaying }?.pause() } catch (_: Exception) { }
+    }
+
+    fun resumeAll() {
+        try { bgmPlayer?.start() } catch (_: Exception) { }
+        try { gameOverPlayer?.start() } catch (_: Exception) { }
+    }
+
     fun stopAll() {
         stopBgm()
         stopGameOverMusic(immediate = true)

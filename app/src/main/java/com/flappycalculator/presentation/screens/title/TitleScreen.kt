@@ -114,7 +114,6 @@ fun TitleScreen(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding()
                 .padding(vertical = 48.dp)
         ) {
             Spacer(modifier = Modifier.weight(1f))

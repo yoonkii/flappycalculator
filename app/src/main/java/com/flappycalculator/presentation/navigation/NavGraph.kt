@@ -46,8 +46,10 @@ fun FlappyCalculatorNavHost(
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_STOP) {
-                soundManager.stopAll()
+            when (event) {
+                Lifecycle.Event.ON_STOP -> soundManager.pauseAll()
+                Lifecycle.Event.ON_START -> soundManager.resumeAll()
+                else -> {}
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)

@@ -92,7 +92,6 @@ fun GameScreen(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .statusBarsPadding()
                     .padding(16.dp)
             ) {
                 // Score display (top left)
@@ -124,7 +123,6 @@ fun GameScreen(
                 .fillMaxWidth()
                 .weight(0.4f)
                 .background(KeypadBackground)
-                .navigationBarsPadding()
                 .padding(horizontal = 12.dp, vertical = 8.dp)
         ) {
             // Answer input display
