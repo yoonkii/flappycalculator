@@ -7,18 +7,20 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.SoundPool
 import android.media.ToneGenerator
+import com.flappycalculator.data.local.SettingsPreferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 /**
- * Manages game sound effects.
+ * Manages game sound effects, BGM, and title music.
  * Uses ToneGenerator for synthesized sounds that work immediately.
- * Can be extended to use SoundPool with actual audio files.
+ * Reads/writes volume and vibration settings via SettingsPreferences.
  */
 class SoundManager(context: Context) {
 
     private val appContext = context.applicationContext
+    private val settingsPrefs = SettingsPreferences(appContext)
 
     private val toneGenerator: ToneGenerator? = try {
         ToneGenerator(AudioManager.STREAM_MUSIC, 100)
@@ -33,12 +35,35 @@ class SoundManager(context: Context) {
 
     private var bgmPlayer: MediaPlayer? = null
     private var gameOverPlayer: MediaPlayer? = null
+    private var titleBgmPlayer: MediaPlayer? = null
     private var fadeOutJob: kotlinx.coroutines.Job? = null
+
     private val bgmFiles = listOf(
         "bgm/flappy_calculator_bgm_1.wav",
         "bgm/flappy_calculator_bgm_2.wav"
     )
     private val gameOverMusic = "bgm/Game Over, Try Again.wav"
+    private val titleBgmFile = "bgm/title_bgm.mp3"
+
+    // --- Settings properties ---
+
+    var bgmVolume: Float
+        get() = settingsPrefs.bgmVolume
+        set(value) {
+            settingsPrefs.bgmVolume = value
+            // Apply to all active BGM players immediately
+            val vol = value.coerceIn(0f, 1f)
+            try { bgmPlayer?.setVolume(vol, vol) } catch (_: Exception) {}
+            try { titleBgmPlayer?.setVolume(vol, vol) } catch (_: Exception) {}
+        }
+
+    var sfxVolume: Float
+        get() = settingsPrefs.sfxVolume
+        set(value) { settingsPrefs.sfxVolume = value }
+
+    var vibrationEnabled: Boolean
+        get() = settingsPrefs.vibrationEnabled
+        set(value) { settingsPrefs.vibrationEnabled = value }
 
     init {
         val audioAttributes = AudioAttributes.Builder()
@@ -63,11 +88,9 @@ class SoundManager(context: Context) {
 
     private fun tryLoadSounds(context: Context) {
         try {
-            // Check if sound resources exist and load them
             val packageName = context.packageName
             val resources = context.resources
 
-            // Try to load each sound - if resource doesn't exist, it will throw
             val flapId = resources.getIdentifier("flap", "raw", packageName)
             val correctId = resources.getIdentifier("correct", "raw", packageName)
             val wrongId = resources.getIdentifier("wrong", "raw", packageName)
@@ -82,7 +105,6 @@ class SoundManager(context: Context) {
 
             isLoaded = sounds.isNotEmpty()
         } catch (e: Exception) {
-            // Sound files not available, will use ToneGenerator fallback
             isLoaded = false
         }
     }
@@ -91,8 +113,8 @@ class SoundManager(context: Context) {
      * Play the flap sound (short whoosh).
      */
     fun playFlap() {
-        if (playSoundPool(Sound.FLAP)) return
-        // Fallback: short beep
+        if (sfxVolume <= 0f) return
+        if (playSoundPool(Sound.FLAP, sfxVolume)) return
         playTone(ToneGenerator.TONE_PROP_BEEP, 50)
     }
 
@@ -100,8 +122,8 @@ class SoundManager(context: Context) {
      * Play the correct answer sound (pleasant ding).
      */
     fun playCorrect() {
-        if (playSoundPool(Sound.CORRECT)) return
-        // Fallback: ascending tone
+        if (sfxVolume <= 0f) return
+        if (playSoundPool(Sound.CORRECT, sfxVolume)) return
         playTone(ToneGenerator.TONE_PROP_ACK, 100)
     }
 
@@ -109,8 +131,8 @@ class SoundManager(context: Context) {
      * Play the wrong answer sound (soft buzz).
      */
     fun playWrong() {
-        if (playSoundPool(Sound.WRONG)) return
-        // Fallback: error tone
+        if (sfxVolume <= 0f) return
+        if (playSoundPool(Sound.WRONG, sfxVolume)) return
         playTone(ToneGenerator.TONE_PROP_NACK, 150)
     }
 
@@ -118,8 +140,8 @@ class SoundManager(context: Context) {
      * Play the hit/collision sound (thud).
      */
     fun playHit() {
-        if (playSoundPool(Sound.HIT)) return
-        // Fallback: low tone
+        if (sfxVolume <= 0f) return
+        if (playSoundPool(Sound.HIT, sfxVolume)) return
         playTone(ToneGenerator.TONE_CDMA_SOFT_ERROR_LITE, 200)
     }
 
@@ -127,8 +149,8 @@ class SoundManager(context: Context) {
      * Play the score increment sound (coin/point sound).
      */
     fun playScore() {
-        if (playSoundPool(Sound.SCORE)) return
-        // Fallback: short positive beep
+        if (sfxVolume <= 0f) return
+        if (playSoundPool(Sound.SCORE, sfxVolume)) return
         playTone(ToneGenerator.TONE_CDMA_CONFIRM, 80)
     }
 
@@ -136,7 +158,7 @@ class SoundManager(context: Context) {
      * Play a key press sound (short click).
      */
     fun playKeyPress() {
-        // Short, subtle click sound for key presses
+        if (sfxVolume <= 0f) return
         playTone(ToneGenerator.TONE_PROP_BEEP2, 30)
     }
 
@@ -172,6 +194,51 @@ class SoundManager(context: Context) {
         }
     }
 
+    // --- Title BGM ---
+
+    /**
+     * Start playing the title screen BGM in a loop.
+     */
+    fun startTitleBgm() {
+        stopTitleBgm()
+        try {
+            val afd: AssetFileDescriptor = appContext.assets.openFd(titleBgmFile)
+            titleBgmPlayer = MediaPlayer().apply {
+                setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_GAME)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .build()
+                )
+                setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
+                afd.close()
+                isLooping = true
+                val vol = bgmVolume
+                setVolume(vol, vol)
+                prepare()
+                start()
+            }
+        } catch (e: Exception) {
+            titleBgmPlayer?.release()
+            titleBgmPlayer = null
+        }
+    }
+
+    /**
+     * Stop the title screen BGM.
+     */
+    fun stopTitleBgm() {
+        try {
+            titleBgmPlayer?.apply {
+                if (isPlaying) stop()
+                release()
+            }
+        } catch (_: Exception) {}
+        titleBgmPlayer = null
+    }
+
+    // --- Game BGM ---
+
     /**
      * Start playing a randomly selected BGM track, looping.
      */
@@ -190,12 +257,12 @@ class SoundManager(context: Context) {
                 setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
                 afd.close()
                 isLooping = true
-                setVolume(0.5f, 0.5f)
+                val vol = bgmVolume
+                setVolume(vol, vol)
                 prepare()
                 start()
             }
         } catch (e: Exception) {
-            // BGM not critical — ignore errors
             bgmPlayer?.release()
             bgmPlayer = null
         }
@@ -207,6 +274,7 @@ class SoundManager(context: Context) {
     fun playGameOverMusic() {
         stopGameOverMusic(immediate = true)
         try {
+            val gameOverVolume = (bgmVolume * 1.2f).coerceAtMost(1f)
             val afd: AssetFileDescriptor = appContext.assets.openFd(gameOverMusic)
             gameOverPlayer = MediaPlayer().apply {
                 setAudioAttributes(
@@ -218,7 +286,7 @@ class SoundManager(context: Context) {
                 setDataSource(afd.fileDescriptor, afd.startOffset, afd.length)
                 afd.close()
                 isLooping = false
-                setVolume(0.6f, 0.6f)
+                setVolume(gameOverVolume, gameOverVolume)
                 prepare()
                 start()
             }
@@ -239,12 +307,13 @@ class SoundManager(context: Context) {
             releaseGameOverPlayer()
         } else {
             val player = gameOverPlayer ?: return
+            val peakVolume = (bgmVolume * 1.2f).coerceAtMost(1f)
             fadeOutJob = scope.launch {
                 val steps = 30
                 val intervalMs = 3000L / steps
                 for (i in steps downTo 0) {
                     try {
-                        val vol = (i.toFloat() / steps) * 0.6f
+                        val vol = (i.toFloat() / steps) * peakVolume
                         player.setVolume(vol, vol)
                     } catch (_: Exception) { break }
                     kotlinx.coroutines.delay(intervalMs)
@@ -278,24 +347,36 @@ class SoundManager(context: Context) {
     }
 
     /**
-     * Release resources.
-     * Call when the game is destroyed.
+     * Pause all active media players (for app backgrounding).
      */
     fun pauseAll() {
         try { bgmPlayer?.takeIf { it.isPlaying }?.pause() } catch (_: Exception) { }
         try { gameOverPlayer?.takeIf { it.isPlaying }?.pause() } catch (_: Exception) { }
+        try { titleBgmPlayer?.takeIf { it.isPlaying }?.pause() } catch (_: Exception) { }
     }
 
+    /**
+     * Resume all paused media players (for app foregrounding).
+     */
     fun resumeAll() {
         try { bgmPlayer?.start() } catch (_: Exception) { }
         try { gameOverPlayer?.start() } catch (_: Exception) { }
+        try { titleBgmPlayer?.start() } catch (_: Exception) { }
     }
 
+    /**
+     * Stop all active music playback.
+     */
     fun stopAll() {
         stopBgm()
         stopGameOverMusic(immediate = true)
+        stopTitleBgm()
     }
 
+    /**
+     * Release all resources.
+     * Call when the game is destroyed.
+     */
     fun release() {
         stopAll()
         soundPool.release()

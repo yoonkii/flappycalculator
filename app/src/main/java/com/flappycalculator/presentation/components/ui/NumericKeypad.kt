@@ -40,6 +40,7 @@ fun NumericKeypad(
     onSubmit: () -> Unit,
     onKeySound: (() -> Unit)? = null,
     enabled: Boolean = true,
+    vibrationEnabled: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -60,7 +61,8 @@ fun NumericKeypad(
             onBackspace = onBackspace,
             onSubmit = onSubmit,
             onKeySound = onKeySound,
-            enabled = enabled
+            enabled = enabled,
+            vibrationEnabled = vibrationEnabled
         )
 
         // Row 2: 4, 5, 6
@@ -74,7 +76,8 @@ fun NumericKeypad(
             onBackspace = onBackspace,
             onSubmit = onSubmit,
             onKeySound = onKeySound,
-            enabled = enabled
+            enabled = enabled,
+            vibrationEnabled = vibrationEnabled
         )
 
         // Row 3: 7, 8, 9
@@ -88,7 +91,8 @@ fun NumericKeypad(
             onBackspace = onBackspace,
             onSubmit = onSubmit,
             onKeySound = onKeySound,
-            enabled = enabled
+            enabled = enabled,
+            vibrationEnabled = vibrationEnabled
         )
 
         // Row 4: Backspace, 0, Submit
@@ -102,7 +106,8 @@ fun NumericKeypad(
             onBackspace = onBackspace,
             onSubmit = onSubmit,
             onKeySound = onKeySound,
-            enabled = enabled
+            enabled = enabled,
+            vibrationEnabled = vibrationEnabled
         )
     }
 }
@@ -114,7 +119,8 @@ private fun KeypadRow(
     onBackspace: () -> Unit,
     onSubmit: () -> Unit,
     onKeySound: (() -> Unit)?,
-    enabled: Boolean
+    enabled: Boolean,
+    vibrationEnabled: Boolean
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -132,6 +138,7 @@ private fun KeypadRow(
                     }
                 },
                 enabled = enabled,
+                vibrationEnabled = vibrationEnabled,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -143,6 +150,7 @@ private fun KeypadButton(
     key: KeypadKey,
     onClick: () -> Unit,
     enabled: Boolean,
+    vibrationEnabled: Boolean,
     modifier: Modifier = Modifier
 ) {
     val haptic = LocalHapticFeedback.current
@@ -175,7 +183,9 @@ private fun KeypadButton(
                 indication = null,  // Using color change instead of ripple
                 enabled = enabled,
                 onClick = {
-                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    if (vibrationEnabled) {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    }
                     onClick()
                 }
             ),
@@ -184,8 +194,8 @@ private fun KeypadButton(
         Text(
             text = when (key) {
                 is KeypadKey.Digit -> key.value.toString()
-                KeypadKey.Backspace -> "⌫"
-                KeypadKey.Submit -> "✓"
+                KeypadKey.Backspace -> "\u232B"
+                KeypadKey.Submit -> "\u2713"
             },
             color = textColor,
             fontSize = 24.sp,

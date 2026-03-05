@@ -141,6 +141,7 @@ fun GameScreen(
                 onSubmit = viewModel::onSubmitPressed,
                 onKeySound = viewModel::playKeySound,
                 enabled = uiState.gameState == GameState.PLAYING,
+                vibrationEnabled = soundManager.vibrationEnabled,
                 modifier = Modifier.fillMaxSize()
             )
         }

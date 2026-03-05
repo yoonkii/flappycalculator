@@ -2,6 +2,7 @@ package com.flappycalculator.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -66,8 +67,15 @@ fun FlappyCalculatorNavHost(
     ) {
         // Title Screen
         composable(Routes.TITLE) {
+            // Start title BGM when entering the title screen
+            LaunchedEffect(Unit) {
+                soundManager.startTitleBgm()
+            }
+
             TitleScreen(
+                soundManager = soundManager,
                 onStartGame = {
+                    soundManager.stopTitleBgm()
                     navController.navigate(Routes.GAME) {
                         // Pop title from back stack so back button exits app
                         popUpTo(Routes.TITLE) { inclusive = true }
@@ -106,6 +114,7 @@ fun FlappyCalculatorNavHost(
                 score = score,
                 highScore = highScore,
                 isNewHighScore = isNewHighScore,
+                vibrationEnabled = soundManager.vibrationEnabled,
                 onRetry = {
                     soundManager.stopGameOverMusic()
                     navController.navigate(Routes.GAME) {

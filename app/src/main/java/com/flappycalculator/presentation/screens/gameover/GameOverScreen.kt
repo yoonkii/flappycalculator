@@ -37,6 +37,7 @@ fun GameOverScreen(
     isNewHighScore: Boolean,
     onRetry: () -> Unit,
     onMenu: () -> Unit,
+    vibrationEnabled: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -190,6 +191,7 @@ fun GameOverScreen(
                     borderColor = Color.White.copy(alpha = 0.2f),
                     textColor = Color.White.copy(alpha = 0.8f),
                     onClick = onMenu,
+                    vibrationEnabled = vibrationEnabled,
                     modifier = Modifier.weight(1f)
                 )
 
@@ -197,6 +199,7 @@ fun GameOverScreen(
                     text = "RETRY",
                     backgroundColor = SubmitButton,
                     onClick = onRetry,
+                    vibrationEnabled = vibrationEnabled,
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -270,6 +273,7 @@ private fun GameOverButton(
     borderColor: Color = Color.Transparent,
     textColor: Color = Color.White,
     onClick: () -> Unit,
+    vibrationEnabled: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     val haptic = LocalHapticFeedback.current
@@ -298,7 +302,9 @@ private fun GameOverButton(
                 interactionSource = interactionSource,
                 indication = null,
                 onClick = {
-                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    if (vibrationEnabled) {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    }
                     onClick()
                 }
             ),

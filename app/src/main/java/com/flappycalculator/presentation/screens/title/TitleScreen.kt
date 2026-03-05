@@ -10,6 +10,10 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -28,7 +32,9 @@ import androidx.compose.ui.unit.sp
 import com.flappycalculator.R
 import com.flappycalculator.data.local.ScorePreferences
 import com.flappycalculator.domain.model.GameConfig
+import com.flappycalculator.presentation.components.ui.SettingsSheet
 import com.flappycalculator.presentation.theme.*
+import com.flappycalculator.util.SoundManager
 
 /**
  * Title screen shown when the app launches.
@@ -37,11 +43,14 @@ import com.flappycalculator.presentation.theme.*
 @Composable
 fun TitleScreen(
     onStartGame: () -> Unit,
+    soundManager: SoundManager,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val prefs = remember { ScorePreferences(context) }
     val highScore = remember { prefs.getHighScore() }
+
+    var showSettings by remember { mutableStateOf(false) }
 
     // Load background bitmap
     val bgBitmap = remember {
@@ -79,7 +88,11 @@ fun TitleScreen(
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
-                onClick = onStartGame
+                onClick = {
+                    if (!showSettings) {
+                        onStartGame()
+                    }
+                }
             ),
         contentAlignment = Alignment.Center
     ) {
@@ -266,6 +279,30 @@ fun TitleScreen(
                 color = TerminalGreen,
                 letterSpacing = 3.sp,
                 fontFamily = MaterialTheme.typography.headlineSmall.fontFamily
+            )
+        }
+
+        // Gear icon button (top-right corner)
+        IconButton(
+            onClick = { showSettings = true },
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .statusBarsPadding()
+                .padding(16.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Settings,
+                contentDescription = "Settings",
+                tint = Color.White.copy(alpha = 0.7f),
+                modifier = Modifier.size(28.dp)
+            )
+        }
+
+        // Settings overlay
+        if (showSettings) {
+            SettingsSheet(
+                soundManager = soundManager,
+                onDismiss = { showSettings = false }
             )
         }
     }
