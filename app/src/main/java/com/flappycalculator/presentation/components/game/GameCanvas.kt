@@ -54,8 +54,7 @@ fun GameCanvas(
 
     // Select sprite based on bird velocity
     val selectedSprite = when {
-        bird.velocity < -200f -> charJump3   // Strong upward, arms high
-        bird.velocity < 0f -> charJump2      // Rising
+        bird.velocity < 0f -> charJump3      // Rising (any upward velocity)
         bird.velocity < 150f -> charDefault  // Neutral/gliding
         else -> charFall                     // Falling
     }

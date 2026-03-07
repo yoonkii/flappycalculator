@@ -28,7 +28,7 @@ object GameConfig {
     const val BIRD_SIZE_RATIO = 0.08f           // bird width = 8% of screen width (base/logical size)
     const val BIRD_ASPECT_RATIO = 1.0f          // bird height/width ratio
     const val BIRD_SPRITE_SCALE = 2.0f          // sprite renders at 2x logical size
-    const val BIRD_HITBOX_RATIO = 0.73f         // hitbox = 73% of visual sprite size (81% * 90%)
+    const val BIRD_HITBOX_RATIO = 0.949f        // hitbox = 73% * 1.3 (30% larger)
     const val BIRD_HITBOX_Y_OFFSET_RATIO = -0.35f // shift hitbox center upward by 35% of radius
 
     // Timing
